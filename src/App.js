@@ -1,17 +1,22 @@
-import logo from './logo.svg';
-import './App.css';
-import Nav from './Components/Nav';
-import Sidebar from './Components/Sidebar';
-import MainContent from './Components/MainContent';
-import Footer from './Components/Footer';
+import React from "react";
+import Home from "./Components/Home/Home";
+import Auth from "./Components/Auth/Auth";
+
+import { HashRouter, Routes, Route, Switch } from "react-router-dom";
+import Protected from "./Components/Protected/Protected";
 
 function App() {
   return (
     <>
-      <Nav/>
-      <Sidebar/>
-      <MainContent/>
-      <Footer/>
+      <HashRouter>
+        <Switch>
+          <Route exact path="/" component={Auth} />
+          <Route exact path="/dashboard" >
+            <Protected cmp={Home}/>
+          </Route>
+          
+        </Switch>
+      </HashRouter>
     </>
   );
 }
