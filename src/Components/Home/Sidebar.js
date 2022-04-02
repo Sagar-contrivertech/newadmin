@@ -122,7 +122,7 @@ const Sidebar = () => {
                                 <a className="d-flex align-items-center" href="index.html">
                                     <i data-feather="home" />
                                     <span className="menu-title text-truncate" data-i18n="Dashboards">
-                                        Dashboards
+                                        Dashboards 
                                     </span>
                                     <span className="badge badge-light-warning rounded-pill ms-auto me-1">
                                         2
