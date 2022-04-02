@@ -1,4 +1,5 @@
 import React from 'react'
+import {Link} from 'react-router-dom'
 
 const Sidebar = () => {
     return (
@@ -119,7 +120,7 @@ const Sidebar = () => {
                             data-menu="menu-navigation"
                         >
                             <li className=" nav-item">
-                                <a className="d-flex align-items-center" href="index.html">
+                                <Link className="d-flex align-items-center" to="/dashboard">
                                     <i data-feather="home" />
                                     <span className="menu-title text-truncate" data-i18n="Dashboards">
                                         Dashboards 
@@ -127,31 +128,7 @@ const Sidebar = () => {
                                     <span className="badge badge-light-warning rounded-pill ms-auto me-1">
                                         2
                                     </span>
-                                </a>
-                                <ul className="menu-content">
-                                    <li>
-                                        <a
-                                            className="d-flex align-items-center"
-                                            href="dashboard-analytics.html"
-                                        >
-                                            <i data-feather="circle" />
-                                            <span className="menu-item text-truncate" data-i18n="Analytics">
-                                                Analytics
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li className="active">
-                                        <a
-                                            className="d-flex align-items-center"
-                                            href="dashboard-ecommerce.html"
-                                        >
-                                            <i data-feather="circle" />
-                                            <span className="menu-item text-truncate" data-i18n="eCommerce">
-                                                eCommerce
-                                            </span>
-                                        </a>
-                                    </li>
-                                </ul>
+                                </Link>
                             </li>
                             <li className=" navigation-header">
                                 <span data-i18n="Apps & Pages">Apps &amp; Pages</span>
