@@ -1,6 +1,15 @@
 import React from 'react'
-
+import { useHistory } from 'react-router-dom';
 const Nav = () => {
+
+    let user = JSON.parse(localStorage.getItem("token"));
+    
+    let history = useHistory()
+    const Logout = () => {
+        localStorage.clear();
+        history.push('/')
+    }
+
     return (
         <div>
             <>
@@ -518,13 +527,13 @@ const Nav = () => {
                                     aria-expanded="false"
                                 >
                                     <div className="user-nav d-sm-flex d-none">
-                                        <span className="user-name fw-bolder">John Doe</span>
-                                        <span className="user-status">Admin</span>
+                                        <span className="user-name fw-bolder">{user && user.data.user.name}</span>
+                                        {/* <span className="user-status">Admin</span> */}
                                     </div>
                                     <span className="avatar">
                                         <img
                                             className="round"
-                                            src="../../../app-assets/images/portrait/small/avatar-s-11.jpg"
+                                            src={user.data.user.avatar.url}
                                             alt="avatar"
                                             height={40}
                                             width={40}
@@ -561,8 +570,8 @@ const Nav = () => {
                                     <a className="dropdown-item" href="page-faq.html">
                                         <i className="me-50" data-feather="help-circle" /> FAQ
                                     </a>
-                                    <a className="dropdown-item" href="auth-login-cover.html">
-                                        <i className="me-50" data-feather="power" /> Logout
+                                    <a className="dropdown-item">
+                                        <i className="me-50" data-feather="power" onClick={Logout} /> Logout
                                     </a>
                                 </div>
                             </li>

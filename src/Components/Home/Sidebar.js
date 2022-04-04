@@ -1,7 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 
 const Sidebar = () => {
+
+  const reload = () => {
+    window.location.reload()
+  }
+
+  useEffect(() => {
+    // reload()
+  }, [reload])
+
   return (
     <>
       {/* BEGIN: Main Menu*/}
@@ -11,8 +20,8 @@ const Sidebar = () => {
       >
         <div className="navbar-header">
           <ul className="nav navbar-nav flex-row">
-            <li className="nav-item me-auto">
-              <a className="navbar-brand" href="index.html">
+            <li className="nav-item me-auto" >
+              <Link className="navbar-brand" to="/dahsboard" onClick={() => window.location.reload(false)}>
                 <span className="brand-logo">
                   <svg
                     viewBox="0 0 139 95"
@@ -94,7 +103,7 @@ const Sidebar = () => {
                   </svg>
                 </span>
                 <h2 className="brand-text">Vuexy</h2>
-              </a>
+              </Link>
             </li>
             <li className="nav-item nav-toggle">
               <a
@@ -121,7 +130,7 @@ const Sidebar = () => {
             id="main-menu-navigation"
             data-menu="menu-navigation"
           >
-            <li className=" nav-item">
+            <li className=" nav-item" onClick={reload}>
               <Link className="d-flex align-items-center" to="/dashboard">
                 <i data-feather="home" />
                 <span
@@ -130,13 +139,11 @@ const Sidebar = () => {
                 >
                   Dashboards
                 </span>
-                <span className="badge badge-light-warning rounded-pill ms-auto me-1">
-                  2
-                </span>
+
               </Link>
             </li>
             <li className=" nav-item">
-              <a className="d-flex align-items-center" href="index.html">
+              {/* <a className="d-flex align-items-center" href="index.html">
                 <i data-feather="home" />
                 <span
                   className="menu-title text-truncate"
@@ -147,8 +154,8 @@ const Sidebar = () => {
                 <span className="badge badge-light-warning rounded-pill ms-auto me-1">
                   2
                 </span>
-              </a>
-              <ul className="menu-content">
+              </a> */}
+              {/* <ul className="menu-content">
                 <li>
                   <a
                     className="d-flex align-items-center"
@@ -177,68 +184,93 @@ const Sidebar = () => {
                     </span>
                   </a>
                 </li>
-              </ul>
+              </ul> */}
+
             </li>
+            {/*  */}
+
+
+
+            {/*  */}
+            <li className=" navigation-header">
+              <span data-i18n="Apps & Pages">Revenue and comssion</span>
+              <i data-feather="more-horizontal" />
+            </li>
+            <li className=" nav-item">
+              <a className="d-flex align-items-center" href="app-kanban.html">
+                <i data-feather="grid" />
+                <span className="menu-title text-truncate" data-i18n="Kanban">
+                  Rveune Details
+                </span>
+              </a>
+            </li>
+
+            <li className=" nav-item">
+              <a className="d-flex align-items-center" href="app-kanban.html">
+                <i data-feather="grid" />
+                <span className="menu-title text-truncate" data-i18n="Kanban">
+                  promotional
+                </span>
+              </a>
+            </li>
+
+            {/*  */}
             <li className=" navigation-header">
               <span data-i18n="Apps & Pages">Brands</span>
               <i data-feather="more-horizontal" />
             </li>
-            <li className=" nav-item">
-              <a className="d-flex align-items-center" href="app-email.html">
-                <i data-feather="mail" />
-                <span className="menu-title text-truncate" data-i18n="Email">
-                  New brands
-                </span>
-              </a>
+            {/* brand navi */}
+            <li className=" nav-item"><a className="d-flex align-items-center" href="#"><i data-feather="copy" />
+              <span className="menu-title text-truncate" data-i18n="Todo">Brand</span></a>
+              <ul className="menu-content">
+                <li><a className="d-flex align-items-center" href="form-input.html"><i data-feather="circle" />
+                  <span className="menu-item text-truncate" data-i18n="Input">New Brands</span></a>
+                </li>
+                <li><a className="d-flex align-items-center" href="form-input-groups.html"><i data-feather="circle" />
+                  <span className="menu-item text-truncate" data-i18n="Input Groups">Brands Details</span></a>
+                </li>
+
+              </ul>
             </li>
-            <li className=" nav-item">
-              <a className="d-flex align-items-center" href="app-chat.html">
-                <i data-feather="message-square" />
-                <span className="menu-title text-truncate" data-i18n="Chat">
-                  Brand Details
-                </span>
-              </a>
-            </li>
+            {/* end of brand Nav */}
+            {/* product nav start */}
             <li className=" navigation-header">
-              <span data-i18n="Apps & Pages">Product</span>
+              <span data-i18n="Apps & Pages">Product /Catgeory
+                <br />
+                subCatgoery
+              </span>
               <i data-feather="more-horizontal" />
             </li>
-            <li className=" nav-item">
-              <a className="d-flex align-items-center" href="app-todo.html">
-                <i data-feather="check-square" />
-                <span className="menu-title text-truncate" data-i18n="Todo">
-                  Add product
-                </span>
-              </a>
+            <li className=" nav-item"><a className="d-flex align-items-center" href="#"><i data-feather="copy" />
+              <span className="menu-title text-truncate" data-i18n="Todo">Product</span></a>
+              <ul className="menu-content">
+                <li onClick={reload}>
+                  <Link className="d-flex align-items-center" to="/product">
+                    <i data-feather="circle" />
+                    <span className="menu-item text-truncate">Add product</span></Link>
+                </li>
+                <li><a className="d-flex align-items-center" href="form-input-groups.html"><i data-feather="circle" />
+                  <span className="menu-item text-truncate" data-i18n="Input Groups">product  Details</span></a>
+                </li>
+                {/* sub category and category routes */}
+                <li className=" nav-item"><a className="d-flex align-items-center" href="#"><i data-feather="copy" />
+                  <span className="menu-title text-truncate" data-i18n="Todo">Catgeory</span></a>
+
+                  {/* ul tag for sub category */}
+                  <ul className="menu-content">
+                    <li><a className="d-flex align-items-center" href="form-input.html"><i data-feather="circle" />
+                      <span className="menu-item text-truncate" data-i18n="Input">Add Catgeory</span></a>
+                    </li>
+                    <li><a className="d-flex align-items-center" href="form-input-groups.html"><i data-feather="circle" />
+                      <span className="menu-item text-truncate" data-i18n="Input Groups">category Details</span></a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+
             </li>
-            <li className=" nav-item">
-              <a className="d-flex align-items-center" href="app-calendar.html">
-                <i data-feather="calendar" />
-                <span className="menu-title text-truncate" data-i18n="Calendar">
-                  List product
-                </span>
-              </a>
-            </li>
-            <li className=" navigation-header">
-              <span data-i18n="Apps & Pages">Category / Sub category</span>
-              <i data-feather="more-horizontal" />
-            </li>
-            <li className=" nav-item">
-              <a className="d-flex align-items-center" href="app-kanban.html">
-                <i data-feather="grid" />
-                <span className="menu-title text-truncate" data-i18n="Kanban">
-                  Add
-                </span>
-              </a>
-            </li>
-            <li className=" nav-item">
-              <a className="d-flex align-items-center" href="app-kanban.html">
-                <i data-feather="grid" />
-                <span className="menu-title text-truncate" data-i18n="Kanban">
-                  List
-                </span>
-              </a>
-            </li>
+            {/* product nav end */}
+
             <li className=" navigation-header">
               <span data-i18n="Apps & Pages">Order</span>
               <i data-feather="more-horizontal" />

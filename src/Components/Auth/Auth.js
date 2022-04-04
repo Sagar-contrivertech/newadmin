@@ -163,29 +163,7 @@ function Auth() {
                         Sign in
                       </button>
                     </form>
-                    <p className="text-center mt-2">
-                      <span>New on our platform?</span>
-                      <a href="auth-register-basic.html">
-                        <span>Create an account</span>
-                      </a>
-                    </p>
-                    <div className="divider my-2">
-                      <div className="divider-text">or</div>
-                    </div>
-                    <div className="auth-footer-btn d-flex justify-content-center">
-                      <a href="#" className="btn btn-facebook">
-                        <i data-feather="facebook" />
-                      </a>
-                      <a href="#" className="btn btn-twitter white">
-                        <i data-feather="twitter" />
-                      </a>
-                      <a href="#" className="btn btn-google">
-                        <i data-feather="mail" />
-                      </a>
-                      <a href="#" className="btn btn-github">
-                        <i data-feather="github" />
-                      </a>
-                    </div>
+                    
                   </div>
                 </div>
                 {/* /Login basic */}

@@ -3,34 +3,116 @@ import Footer from "../Home/Footer";
 import Nav from "../Home/Nav";
 import Sidebar from "../Home/Sidebar";
 import axios from "../Axios/axios";
+import instance from "../Axios/axios";
+import { useHistory } from "react-router-dom";
 
 function AddProduct() {
-  const [getProduct, setGetProduct] = useState();
+
+  const [name, setName] = useState("");
+  const [price, setPrice] = useState("");
+  const [description, setDescription] = useState("");
+  const [images, setImages] = useState([]);
+  const [ratings, setRatings] = useState(0);
+  const [category, setCategory] = useState("");
+  const [seller, setSeller] = useState("");
+  const [stocks, setStocks] = useState(0);
+  const [reviews, setReviews] = useState(0);
+  const [subCategory, setSubCategory] = useState([])
+  const [selectedSubCategory, setSelectedSubCategory] = useState('')
+  // console.log('hehehehe',subCategory);
+  const [categoryData, setCategoryData] = useState([]);
+  const [IsFeature, setIsFeature] = useState(false)
+  const user = JSON.parse(localStorage.getItem("token"));
+  const username = user.data.user.name;
+
   const authHeader = () => {
     // return authorization header with basic auth credentials
-    const user = JSON.parse(localStorage.getItem("token"));
-
     if (user && user.data.token) {
-      return { Authorization: `${user.data.token}` };
+      return {
+        Authorization: `${user.data.token}`,
+        "Content-Type": "application/json",
+      };
     } else {
       return {};
     }
   };
-  const brandURL = "/products";
 
-  const getProductList = async () => {
-    await axios
-      .get(brandURL, { headers: authHeader() })
+  const getCategory = async () => {
+    const res = await instance.get("getcategory");
+    // console.log('lelelelel',res);
+    setCategoryData(res.data.categoryList);
+  };
+
+  // get SubCategory
+  const getSubCategory = async () => {
+    await instance.get('getSubcategory')
+      .then((res) => {
+        // console.log('lelelelel',res);
+        setSubCategory(res.data.subCategoryList);
+        //console.log('lelelelel', subCategory);
+      })
+
+    console.log(subCategory,'res')
+  };
+
+  const formSubmitHandler = async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.set("name", name);
+    formData.set("price", price);
+    formData.set("description", description);
+    formData.set("ratings", parseInt(ratings));
+    formData.set("category", category);
+    formData.set("reviews", parseInt(reviews));
+    formData.set('subCategory', selectedSubCategory)
+    formData.set("stock", parseInt(stocks));
+    formData.set("seller", username);
+    formData.set("IsFeature", IsFeature);
+
+    images.forEach(image => {
+      formData.append('images', image)
+    })
+
+    console.log(images);
+
+    let response = await instance
+      .post("/product/new", formData, {
+        headers: authHeader(),
+
+      })
       .then((response) => {
+
+        if (response.status == 200) {
+          window.location.reload()
+        }
+
         console.log(response);
-        setGetProduct(response.data.products);
-        console.log(getProduct)
       })
       .catch((error) => {
         console.log(error);
-        // set some error message
       });
+    console.log(response);
   };
+
+  const onChange = (e) => {
+    const files = Array.from(e.target.files)
+
+    setImages([]);
+
+    files.forEach((file) => {
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        if (reader.readyState === 2) {
+          setImages((oldArray) => [...oldArray, reader.result]);
+        }
+      };
+
+      reader.readAsDataURL(file);
+    });
+
+  }
 
   const effect = () => {
     const script = document.createElement("script");
@@ -46,7 +128,9 @@ function AddProduct() {
   };
   useEffect(() => {
     effect();
-    getProductList();
+    getCategory();
+    getSubCategory();
+    // getProductList();
   }, []);
   return (
     <>
@@ -170,7 +254,7 @@ function AddProduct() {
                       </button>
                       <div className="modal-header mb-1">
                         <h5 className="modal-title" id="exampleModalLabel">
-                          Add User
+                          Add Product
                         </h5>
                       </div>
                       <div className="modal-body flex-grow-1">
@@ -179,14 +263,18 @@ function AddProduct() {
                             className="form-label"
                             htmlFor="basic-icon-default-fullname"
                           >
-                            Full Name
+                            Product Name
                           </label>
                           <input
                             type="text"
                             className="form-control dt-full-name"
                             id="basic-icon-default-fullname"
-                            placeholder="John Doe"
-                            name="user-fullname"
+                            placeholder="price name"
+                            name="name"
+                            value={name}
+                            onChange={(e) => {
+                              setName(e.target.value);
+                            }}
                           />
                         </div>
                         <div className="mb-1">
@@ -194,14 +282,18 @@ function AddProduct() {
                             className="form-label"
                             htmlFor="basic-icon-default-uname"
                           >
-                            Username
+                            Price
                           </label>
                           <input
                             type="text"
                             id="basic-icon-default-uname"
                             className="form-control dt-uname"
-                            placeholder="Web Developer"
-                            name="user-name"
+                            placeholder="ex : 2500"
+                            name="price"
+                            value={price}
+                            onChange={(e) => {
+                              setPrice(e.target.value);
+                            }}
                           />
                         </div>
                         <div className="mb-1">
@@ -209,14 +301,18 @@ function AddProduct() {
                             className="form-label"
                             htmlFor="basic-icon-default-email"
                           >
-                            Email
+                            Description
                           </label>
                           <input
                             type="text"
                             id="basic-icon-default-email"
                             className="form-control dt-email"
                             placeholder="john.doe@example.com"
-                            name="user-email"
+                            name="description"
+                            value={description}
+                            onChange={(e) => {
+                              setDescription(e.target.value);
+                            }}
                           />
                         </div>
                         <div className="mb-1">
@@ -224,14 +320,18 @@ function AddProduct() {
                             className="form-label"
                             htmlFor="basic-icon-default-contact"
                           >
-                            Contact
+                            Stocks
                           </label>
                           <input
                             type="text"
                             id="basic-icon-default-contact"
                             className="form-control dt-contact"
                             placeholder="+1 (609) 933-44-22"
-                            name="user-contact"
+                            name="stock"
+                            value={stocks}
+                            onChange={(e) => {
+                              setStocks(e.target.value);
+                            }}
                           />
                         </div>
                         <div className="mb-1">
@@ -239,83 +339,99 @@ function AddProduct() {
                             className="form-label"
                             htmlFor="basic-icon-default-company"
                           >
-                            Company
+                            Image
                           </label>
+                          <br />
                           <input
-                            type="text"
-                            id="basic-icon-default-company"
-                            className="form-control dt-contact"
-                            placeholder="PIXINVENT"
-                            name="user-company"
+                            // type="text"
+                            type="file"
+                            name="images"
+                            multiple
+                            onChange={onChange}
+                          // value={images}
+
                           />
                         </div>
                         <div className="mb-1">
                           <label className="form-label" htmlFor="country">
-                            Country
+                            Featured
                           </label>
-                          <select id="country" className="select2 form-select">
-                            <option value="Australia">USA</option>
-                            <option value="Bangladesh">Bangladesh</option>
-                            <option value="Belarus">Belarus</option>
-                            <option value="Brazil">Brazil</option>
-                            <option value="Canada">Canada</option>
-                            <option value="China">China</option>
-                            <option value="France">France</option>
-                            <option value="Germany">Germany</option>
-                            <option value="India">India</option>
-                            <option value="Indonesia">Indonesia</option>
-                            <option value="Israel">Israel</option>
-                            <option value="Italy">Italy</option>
-                            <option value="Japan">Japan</option>
-                            <option value="Korea">Korea, Republic of</option>
-                            <option value="Mexico">Mexico</option>
-                            <option value="Philippines">Philippines</option>
-                            <option value="Russia">Russian Federation</option>
-                            <option value="South Africa">South Africa</option>
-                            <option value="Thailand">Thailand</option>
-                            <option value="Turkey">Turkey</option>
-                            <option value="Ukraine">Ukraine</option>
-                            <option value="United Arab Emirates">
-                              United Arab Emirates
-                            </option>
-                            <option value="United Kingdom">
-                              United Kingdom
-                            </option>
-                            <option value="United States">United States</option>
+                          <select id="country" className=" form-select"
+                            value={IsFeature}
+                            onChange={(e) => {
+                              setIsFeature(e.target.value)
+                            }}
+                            label="Featured"
+                            name="IsFeatured"
+                          >
+                            {/* <option value="">none</option> */}
+                            <option value={true}>No</option>
+                            <option value={false}>Yes</option>
+
                           </select>
                         </div>
                         <div className="mb-1">
-                          <label className="form-label" htmlFor="user-role">
-                            User Role
+                          <label className="form-label" >
+                            Category
                           </label>
                           <select
-                            id="user-role"
-                            className="select2 form-select"
+                            id="Category"
+                            className="form-select"
+                            name="category"
+                            value={category}
+                            onChange={(e) => {
+                              setCategory(e.target.value);
+                            }}
                           >
-                            <option value="subscriber">Subscriber</option>
-                            <option value="editor">Editor</option>
-                            <option value="maintainer">Maintainer</option>
-                            <option value="author">Author</option>
-                            <option value="admin">Admin</option>
+                            <option hidden>Select</option>
+                            {categoryData &&
+                              categoryData.map((c) =>
+                              (
+                                <>
+                                  <option value={c._id}>{c.name}</option>
+                                </>
+                              )
+                              )}
+
                           </select>
                         </div>
-                        <div className="mb-2">
-                          <label className="form-label" htmlFor="user-plan">
-                            Select Plan
+                        {/*  */}
+
+                        {/*  */}
+                        <div className="mb-1">
+                          <label className="form-label">
+                            Sub Category
                           </label>
                           <select
-                            id="user-plan"
-                            className="select2 form-select"
+                            id="Category"
+                            className="form-select"
+                            name="selectedSubCategory"
+                            value={selectedSubCategory}
+                            onChange={(e) => {
+                              setSelectedSubCategory(e.target.value);
+                              console.log('yooo', selectedSubCategory)
+                            }}
                           >
-                            <option value="basic">Basic</option>
-                            <option value="enterprise">Enterprise</option>
-                            <option value="company">Company</option>
-                            <option value="team">Team</option>
+                            <option hidden>Select</option>
+                            {subCategory &&
+                              subCategory.map((c) => {
+                                // console.log(c,'s')
+                                return (
+                                  <>
+                                    <option value={c._id}>{c.name}</option>
+                                  </>
+                                )
+                              }
+                              )}
+
                           </select>
                         </div>
+                        {/*  */}
+                       
                         <button
                           type="submit"
                           className="btn btn-primary me-1 data-submit"
+                          onClick={formSubmitHandler}
                         >
                           Submit
                         </button>

@@ -18,7 +18,7 @@ function App() {
           <Route exact path="/dashboard" >
             <Protected cmp={Home}/>
           </Route>
-          <Route exact path="/addproduct" >
+          <Route exact path="/product" >
             <Protected cmp={AddProduct}/>
           </Route>
         </Switch>
